@@ -37,35 +37,17 @@ Aby  obliczyć  jaki  błąd  wnosi  wektor  ( )  należy  wyznaczyć  normę  e
 
 W  tym  zadaniu  macierz   jest  macierzą  kwadratową  o  rozmiarze  ×  gdzie  = 998. Macierz A składa się z wyrazów  ,  oraz   , gdzie 
 
-1 2 3
-
-1 = 5 + 4  = 9 2 = 3 = −1 
+![obraz](https://user-images.githubusercontent.com/72522808/163672375-d7cbda86-3328-4f27-8b6b-9c8e96d48583.png)
 
 Macierz A przedstawiona została poniżej. 
+![obraz](https://user-images.githubusercontent.com/72522808/163672369-d9306d15-bbdf-4b2d-9a9f-4e75cfcf1fa4.png)
 
-9 −1 −1 0 0 0 0 … 0 −1 9 −1 −1 0 0 0 … 0
-
-−1 −1 9 −1 −1 0 0 … 0 = 
-
-0 −1 −1 9 −1 −1 0 … 0
-
-- ⋮ ⋮ ⋮ ⋮ ⋮ ⋮ ⋮ ⋮
-
-[ 0 0 … 0 0 0 −1 −1 9 ] Wektor  ma długość  . Jego n-ty element ma wartość  
-
-- sin(  ∙ (4  + 1)) = sin(5 ∙  )   
+Wektor  ma długość  . Jego n-ty element ma wartość  
+![obraz](https://user-images.githubusercontent.com/72522808/163672381-9c8e8256-2867-4e37-a7cb-e1ab1a3cd68b.png)
 
 Wektor b przedstawiony został poniżej. 
+![obraz](https://user-images.githubusercontent.com/72522808/163672385-aa6fc0b7-911d-4705-b4a6-6c719986f534.png)
 
-sin(5 ∙ 0) sin(5 ∙ 1) sin(5 ∙ 2)
-
-\=
-
-sin(5 ∙ 3)
-
-⋮
-
-[ sin(5 ∙ 997) ]
 
 2. **Zadanie B**  
 
@@ -73,178 +55,16 @@ Celem tego zadania była implementacja metod iteracyjnych rozwiązywania układ�
 
 Podczas  obliczeń  przy  pomocy  obydwu  metod  wykorzystuje  funkcje  wyznaczające  wartość residuum oraz normę wektora. Ich implementacje umieściłem poniżej. 
 
-double\* calcResiduum(Matrix A, Vector b, Vector x) { 
-
-Vector c = A.matrixMultiplicationVector(x.valuesArr); for (int i = 0; i < A.getSize(); i++) { 
-
-c.valuesArr[i] -= b.valuesArr[i]; 
-
-} 
-
-return c.valuesArr; 
-
-} 
-
-double vectorEuclNorm(int size,double\* x) { 
-
-double tmp = 0; 
-
-for (int i = 0; i < size; i++) { 
-
-tmp += (x[i] \* x[i]); 
-
-} 
-
-return sqrt(tmp); 
-
-} 
-
 Najpierw zaimplementowałem metodę Jacobiego.  
 
 
-double\* runJacobiFormula(Matrix\* A, Vector\* b, double\* x1) { 
-
-int size = A->getSize(); 
-
-double\* x = new double[size]; 
-
-double sum = 0; 
-
-for (int i = 0; i < size; i++) { 
-
-sum = 0; 
-
-for (int j = 0; j < size; j++) { 
-
-if (i != j)sum += A->valuesArr[i][j] \* x1[j]; } 
-
-sum = b->valuesArr[i] - sum; 
-
-x[i] = sum / A->valuesArr[i][i]; 
-
-} 
-
-return x; 
-
-} 
-
-void solveJacobi(Matrix\* A, Vector\* b, CSVWriter \*csv = NULL) { 
-
-int size = A->getSize(); 
-
-clock\_t begin, finish; 
-
-double final\_time; 
-
-begin = clock(); 
-
-int iterCounter = 0; 
-
-double currRes = 0, finalRes = pow(10, -9); Vector\* x = new Vector(size, 1); 
-
-while (true) { 
-
-iterCounter++; 
-
-x->valuesArr = runJacobiFormula(A, b, x->valuesArr); 
-
-currRes = vectorEuclNorm(A->getSize(),calcResiduum(\*A, \*b, \*x)); if (currRes < finalRes || iterCounter == 5000) 
-
-break; 
-
-//cout << iterCounter << "\n"; 
-
-} 
-
-finish = clock(); 
-
-final\_time = (double)(finish - begin); 
-
-equResult\* result = new equResult("Jacobi", currRes, iterCounter, final\_time); result->printResult(); 
-
-cout << size << "\t" << final\_time << endl; 
-
-if(csv != NULL) 
-
-csv->newRow() << size << final\_time; 
-
-} 
-
 Następnie zaimplementowałem metodę Gaussa-Seidla. 
 
-double\* runGaussSeidlFormula(Matrix\* A, Vector\* b, double\* x1) { 
 
-int size = A->getSize(); 
-
-double sum = 0; 
-
-for (int i = 0; i < size; i++) { 
-
-sum = 0; 
-
-for (int j = 0; j < i; j++) { 
-
-sum += A->valuesArr[i][j] \* x1[j]; 
-
-} 
-
-for (int j = i + 1; j < size; j++) { 
-
-sum += A->valuesArr[i][j] \* x1[j]; 
-
-} 
-
-sum = b->valuesArr[i] - sum; 
-
-x1[i] = sum / A->valuesArr[i][i]; 
-
-} 
-
-return x1; 
-
-} 
-
-void solveGaussSeidl(Matrix\* A, Vector\* b, CSVWriter\* csv = NULL) { 
-
-clock\_t begin, finish; 
-
-double final\_time; 
-
-begin = clock(); 
-
-int size = A->getSize(); 
-
-int iterCounter = 0; 
-
-double currRes = 0, finalRes = pow(10, -9); Vector\* x = new Vector(size, 1); 
-
-while (true) { 
-
-iterCounter++; 
-
-x->valuesArr = runGaussSeidlFormula(A, b, x->valuesArr); currRes = vectorEuclNorm(A->getSize(),calcResiduum(\*A, \*b, \*x)); if (currRes < finalRes|| iterCounter == 5000) 
-
-break; 
-
-} 
-
-finish = clock(); 
-
-final\_time = (double)(finish - begin); 
-
-equResult\* result = new equResult("Gauss-Seidl", currRes, iterCounter, 
-
-final\_time); 
-
-result->printResult(); 
-
-//cout << size << "\t" << final\_time << endl; if (csv != NULL) 
-
-csv->newRow() << size << final\_time; } 
 
 Program zwraca poniższe informacje. 
 
-![](Aspose.Words.0d90bdf2-7497-4e35-a5e0-cd03d3f6c17d.001.png)
+![obraz](https://user-images.githubusercontent.com/72522808/163672399-4b72a285-039c-4815-9f24-1d67687ccd46.png)
 
 Rozwiązanie układu równań uzyskuje się szybciej przy użyciu metody Gaussa-Seidla. Istotny jest także fakt, że przy użyciu metody Jacobiego potrzebna jest większa liczba iteracji aby obliczyć wynik. W tym przypadku, różnice pomiędzy metodami są mało znaczące.  
 
@@ -252,47 +72,18 @@ Rozwiązanie układu równań uzyskuje się szybciej przy użyciu metody Gaussa-
 
 W tym zadaniu macierz A składa się z wyrazów  1,  2 oraz   3, gdzie 
 
-1 = 3 
-
-2 = 3 = −1 
+![obraz](https://user-images.githubusercontent.com/72522808/163672406-2bac862e-15a4-43f6-8fd4-27646f79c2b0.png)
 
 Macierz A przedstawiona została poniżej. 
 
-3 −1 −1 0 0 0 −1 3 −1 −1 0 0
+![obraz](https://user-images.githubusercontent.com/72522808/163672409-742d1b20-9d5c-4812-bdc4-68568582c711.png)
 
-−1 −1 3 −1 −1 0 =  
-
-0 −1 −1 3 −1 −1
-
-- ⋮ ⋮ ⋮ ⋮ ⋮
-
-[ 0 0 … 0 0 0 Wartości w wektorze b o długości N nie zmieniają się. 
-
-0 … 0
-
-0 … 0
-
-0 … 0
-
-0 … 0
-
-- ⋮ ⋮
-
-−1 −1 3 ]
-
-sin(5 ∙ 0) sin(5 ∙ 1) sin(5 ∙ 2)
-
-\=
-
-sin(5 ∙ 3)
-
-⋮
-
-[ sin(5 ∙ 997) ]
+Wartości w wektorze b o długości N nie zmieniają się.
+![obraz](https://user-images.githubusercontent.com/72522808/163672414-a486241f-16d5-4322-b8dd-3ac0f3ed804d.png)
 
 W funkcjach obliczających rozwiązanie układu równań zgodnie z metodą Jacobiego oraz Gaussa- Seidlera wprowadziłem warunek, aby kończyły się gdy liczba iteracji osiągnie 5000. Dzięki temu można uniknąć nieskończonej pętli w przypadku gdy układ nie ma dokładnego rozwiązania.  
 
-![](Aspose.Words.0d90bdf2-7497-4e35-a5e0-cd03d3f6c17d.002.png)
+![obraz](https://user-images.githubusercontent.com/72522808/163672419-0d8e6f5b-5501-4cef-91f8-5054e2616146.png)
 
 Metody  iteracyjne  dla  analizowanego  układu  nie  zbiegają  się.  Na  konsoli  widoczne  jest, że norma  wektora  osiąga  wartość  -*nan(ind)*.  Skrót  *NAN*  w  języku  angielskim  oznacza „Not A Number”, a więc nie otrzymaliśmy dokładnego rozwiązania. Można z tego wyciągnąć wniosek, że pętla została przerwana przez warunek sprawdzający ilość wykonanych iteracji. 
 
@@ -300,92 +91,9 @@ Metody  iteracyjne  dla  analizowanego  układu  nie  zbiegają  się.  Na  kons
 
 Do  wyznaczenia  rozwiązania  układu  równań  została  wykorzystana  implementacja  metody faktoryzacji LU. Kod umieszczam poniżej. 
 
-void LU(Matrix\* L, Matrix\* U) { 
-
-int size = L->getSize(); 
-
-for (int k = 0; k < size - 1; k++) { 
-
-for (int j = k + 1; j < size; j++) { 
-
-L->valuesArr[j][k] = U->valuesArr[j][k] / U->valuesArr[k][k]; 
-
-for (int r = k; r < size; r++) { 
-
-U->valuesArr[j][r] = U->valuesArr[j][r] - L->valuesArr[j][k] \* 
-
-U->valuesArr[k][r]; 
-
-} } 
-
-} 
-
-} 
-
-void solveLUFactorisation(Matrix \*A, Vector \*b) { 
-
-clock\_t begin, finish; 
-
-double final\_time; 
-
-begin = clock(); 
-
-int size = A->getSize(); 
-
-Matrix\* U = new Matrix(size, 3, -1, -1); Matrix\* L = new Matrix(size, 1, 0, 0); LU(L, U); 
-
-Vector\* y = new Vector(size, 0); 
-
-for (int i = 0; i < size; i++) { 
-
-double sum = 0; 
-
-for (int j = 0; j < i; j++) { 
-
-sum += L->valuesArr[i][j] \* y->valuesArr[j]; } 
-
-y->valuesArr[i] = b->valuesArr[i] - sum; 
-
-} 
-
-double\* x = new double[size]; 
-
-for (int i = 0; i < size; i++) { 
-
-x[i] = 0; 
-
-} 
-
-for (int i = size - 1; i >= 0; i--) { 
-
-double sum = 0; 
-
-for (int j = i; j < size; j++) { 
-
-sum += U->valuesArr[i][j] \* x[j]; 
-
-} 
-
-x[i] = (y->valuesArr[i] - sum) / U->valuesArr[i][i]; 
-
-} 
-
-Vector\* z = new Vector(size, 0); 
-
-z->valuesArr = x; 
-
-double res = vectorEuclNorm(A->getSize(), calcResiduum(\*A, \*b, \*z)); finish = clock(); 
-
-final\_time = (double)(finish - begin) / CLOCKS\_PER\_SEC; 
-
-equResult \*result = new equResult(); result->printResult("LUFact", res, final\_time); 
-
-} 
-
-
 Analizowane były macierze takie same jak w zadaniu C, w którym metody iteracyjne nie zbiegły się. Jednak używając metody faktoryzacji LU otrzymaliśmy dokładny wynik. 
 
-![](Aspose.Words.0d90bdf2-7497-4e35-a5e0-cd03d3f6c17d.003.png)
+![obraz](https://user-images.githubusercontent.com/72522808/163672428-ff677648-f27e-4b34-84e4-c3e849f764d9.png)
 
 Wartość  residuum  osiągnęła  wartość  około  6,11 ∙ 10-13.  Czas  wykonywania  algorytmu  był relatywnie krótki – około 1,5 sekundy. 
 
@@ -397,49 +105,10 @@ int NArray[] = { 500, 1000, 2000, 3000, 4000, 5000};
 
 Dzięki  klasie  *CSVWriter*  informacje  o  ilości  niewiadomych  w  danym  przypadku  oraz  czasie rozwiązywania  układu  równań  zapisywane  są  do  plików  CSV:  *JacobiTimeVsSize.csv*  oraz *GaussSeidlTimeVsSize.csv*.  Na  podstawie  uzyskanych  danych,  w  programie  Microsoft  Excel stworzyłem w wykresy przedstawiające zależności pomiędzy rozmiarem macierzy a czasem rozwiązywania układu równań. Wykresy zamieściłem poniżej. 
 
-Czas trwania algorytmu Jacobi rowiązującego układ z daną ilością niewiadomych![](Aspose.Words.0d90bdf2-7497-4e35-a5e0-cd03d3f6c17d.004.png)
+![obraz](https://user-images.githubusercontent.com/72522808/163672443-9ca5a1e3-0b96-4ef3-aafa-044edc5c4519.png)
 
-5000
+![obraz](https://user-images.githubusercontent.com/72522808/163672448-e78c9805-4061-4f32-8973-837a02883f03.png)
 
-4500
-
-4000
-
-3500
-
-3000 Pomiary 2500
-
-2000
-
-1500
-
-1000
-
-500
-
-Czas trwania algorytmu0 [ms]
-
-0 1000 2000 3000 4000 5000 6000
-
-Liczba niewiadomych w równaniu
-
-Czas trwania algorytmu Gaussa-Seidla rowiązującego układ z daną ilością niewiadomych![](Aspose.Words.0d90bdf2-7497-4e35-a5e0-cd03d3f6c17d.005.png)
-
-3000
-
-2500
-
-2000
-
-1500 Pomiary 1000
-
-500
-
-0 Czas trwania algorytmu [ms]
-
-0 1000 2000 3000 4000 5000 6000
-
-Liczba niewiadomych w równaniu
 
 6. **Zadanie F - Wnioski** 
 
