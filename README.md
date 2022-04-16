@@ -33,7 +33,7 @@ Aby  obliczyć  jaki  błąd  wnosi  wektor  ( )  należy  wyznaczyć  normę  e
 
 3. **Zadanie projektowe** 
 
-1. **Zadanie A** 
+3.1. **Zadanie A** 
 
 W  tym  zadaniu  macierz   jest  macierzą  kwadratową  o  rozmiarze  ×  gdzie  = 998. Macierz A składa się z wyrazów  ,  oraz   , gdzie 
 
@@ -49,7 +49,7 @@ Wektor b przedstawiony został poniżej.
 ![obraz](https://user-images.githubusercontent.com/72522808/163672385-aa6fc0b7-911d-4705-b4a6-6c719986f534.png)
 
 
-2. **Zadanie B**  
+3.2. **Zadanie B**  
 
 Celem tego zadania była implementacja metod iteracyjnych rozwiązywania układów równań liniowych: Jacobiego i Gaussa–Seidla. 
 
@@ -68,7 +68,7 @@ Program zwraca poniższe informacje.
 
 Rozwiązanie układu równań uzyskuje się szybciej przy użyciu metody Gaussa-Seidla. Istotny jest także fakt, że przy użyciu metody Jacobiego potrzebna jest większa liczba iteracji aby obliczyć wynik. W tym przypadku, różnice pomiędzy metodami są mało znaczące.  
 
-3. **Zadanie C** 
+3.3. **Zadanie C** 
 
 W tym zadaniu macierz A składa się z wyrazów  1,  2 oraz   3, gdzie 
 
@@ -87,7 +87,7 @@ W funkcjach obliczających rozwiązanie układu równań zgodnie z metodą Jacob
 
 Metody  iteracyjne  dla  analizowanego  układu  nie  zbiegają  się.  Na  konsoli  widoczne  jest, że norma  wektora  osiąga  wartość  -*nan(ind)*.  Skrót  *NAN*  w  języku  angielskim  oznacza „Not A Number”, a więc nie otrzymaliśmy dokładnego rozwiązania. Można z tego wyciągnąć wniosek, że pętla została przerwana przez warunek sprawdzający ilość wykonanych iteracji. 
 
-4. **Zadanie D** 
+3.4. **Zadanie D** 
 
 Do  wyznaczenia  rozwiązania  układu  równań  została  wykorzystana  implementacja  metody faktoryzacji LU. Kod umieszczam poniżej. 
 
@@ -97,7 +97,7 @@ Analizowane były macierze takie same jak w zadaniu C, w którym metody iteracyj
 
 Wartość  residuum  osiągnęła  wartość  około  6,11 ∙ 10-13.  Czas  wykonywania  algorytmu  był relatywnie krótki – około 1,5 sekundy. 
 
-5. **Zadanie E** 
+3.5. **Zadanie E** 
 
 Stworzyłem tablice  *NArray* zawierającą kilka liczb całkowitych – są to kolejno analizowane rozmiary macierzy A. 
 
@@ -110,6 +110,6 @@ Dzięki  klasie  *CSVWriter*  informacje  o  ilości  niewiadomych  w  danym  pr
 ![obraz](https://user-images.githubusercontent.com/72522808/163672448-e78c9805-4061-4f32-8973-837a02883f03.png)
 
 
-6. **Zadanie F - Wnioski** 
+3.6. **Zadanie F - Wnioski** 
 
 Po wykonaniu zadań nie potrafię stwierdzić która metoda jest najlepsza. Zadanie B pokazuje, że metody iteracyjne wykonują się bardzo szybko. Jednak zadania D oraz E ilustrują przypadek gdy  metoda  bezpośrednia  ma  znaczącą  przewagę  nad  metodami  iteracyjnymi.  Uważam, że równania powinno się najpierw rozwiązywać metodami iteracyjnymi, a jeśli nie będą zbiegać, wtedy zastosować metodę bezpośrednią, na przykład metodę faktoryzacji LU. Na podstawie wyników funckji „Trendilne” w MS Excel, można powiedzieć, że zależność pomiędzy czasem wykonywania algorytmu a liczba niewiaodmych w równaniu rośnie potęgowo. 
