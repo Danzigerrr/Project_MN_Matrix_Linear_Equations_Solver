@@ -35,7 +35,7 @@ double* runJacobiFormula(Matrix* A, Vector* b, double* x1) {
 	}
 	return x;
 }
-void solveJacobi(Matrix* A, Vector* b) {
+void solveJacobi(Matrix* A, Vector* b, CSVWriter *csv = NULL) {
 	int size = A->getSize();
 	clock_t begin, finish;
 	double final_time;
@@ -59,6 +59,8 @@ void solveJacobi(Matrix* A, Vector* b) {
 	equResult* result = new equResult("Jacobi", currRes, iterCounter, final_time);
 	//result->printResult();
 	cout << size << "\t" << final_time << endl;
+	if(csv != NULL)
+	csv->newRow() << size << final_time;
 
 }
 
@@ -81,7 +83,7 @@ double* runGaussSeidlFormula(Matrix* A, Vector* b, double* x1) {
 	}
 	return x1;
 }
-void solveGaussSeidl(Matrix* A, Vector* b) {
+void solveGaussSeidl(Matrix* A, Vector* b, CSVWriter* csv = NULL) {
 	clock_t begin, finish;
 	double final_time;
 	begin = clock();
@@ -105,6 +107,8 @@ void solveGaussSeidl(Matrix* A, Vector* b) {
 	//result->printResult();
 	cout << size << "\t" << final_time << endl;
 
+	if (csv != NULL)
+		csv->newRow() << size << final_time;
 }
 
 // -------

@@ -9,7 +9,7 @@ private:
 	string mathodName = "";
 public:
 	void printResult() {
-		cout << endl << "Method: " << mathodName << ":\tNorm: " << residuum << ".\tIterations: " << iterCoutner << ".\tTime: " << final_time << " seconds." << endl;
+		cout << endl << "Method: " << mathodName << ":\tNorm: " << residuum << ".\tIterations: " << iterCoutner << ".\tTime: " << final_time << " miliseconds." << endl;
 	}
 	void printResult(string MethName, double val,  double final_time) {
 		cout << endl << "Method: " << MethName << ":\tResult: " << val << ".\tTime: " << final_time << " miliseconds." << endl;

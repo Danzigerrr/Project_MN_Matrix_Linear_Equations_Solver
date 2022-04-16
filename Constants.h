@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
-#include <windows.h>
+#include <fstream>
+#include "CSVWriter.h"
 #include "Matrix.h"
 #include "Vector.h"
 #define MY_INDEX 184698
