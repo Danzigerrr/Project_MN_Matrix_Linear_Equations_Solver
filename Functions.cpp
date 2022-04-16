@@ -51,12 +51,15 @@ void solveJacobi(Matrix* A, Vector* b) {
 		currRes = vectorEuclNorm(A->getSize(),calcResiduum(*A, *b, *x));
 		if (currRes < finalRes || iterCounter == 5000)
 			break;
+		//cout << iterCounter << "\n";
 	}
 	finish = clock();
-	final_time = (double)(finish - begin) / CLOCKS_PER_SEC;
+	final_time = (double)(finish - begin);
 
 	equResult* result = new equResult("Jacobi", currRes, iterCounter, final_time);
-	result->printResult();
+	//result->printResult();
+	cout << size << "\t" << final_time << endl;
+
 }
 
 
@@ -96,10 +99,12 @@ void solveGaussSeidl(Matrix* A, Vector* b) {
 			break;
 	}
 	finish = clock();
-	final_time = (double)(finish - begin) / CLOCKS_PER_SEC;
+	final_time = (double)(finish - begin);
 
 	equResult* result = new equResult("Gauss-Seidl", currRes, iterCounter, final_time);
-	result->printResult();
+	//result->printResult();
+	cout << size << "\t" << final_time << endl;
+
 }
 
 // -------
